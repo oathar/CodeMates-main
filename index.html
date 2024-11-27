@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revision Planner</title>
+  <link rel="stylesheet" href="styles.css"> <!-- Linking the CSS file -->
+</head>
+<body>
+
+  <video autoplay loop muted class="background-video">
+    <source src="/assets/animation.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="header-box">
+    Revision Planner
+  </div>
+
+  <div class="add-btn" onclick="openNewPage()">+</div>
+
+  <script>
+    function openNewPage() {
+      window.location.href = "newpage.html"; // Redirect to the new page
+    }
+  </script>
+</body>
+</html>
