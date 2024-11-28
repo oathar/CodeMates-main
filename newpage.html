@@ -23,7 +23,49 @@
     <ul id="schedule-list"></ul>
   </div>
 
-  <script src="script2.js"></script>
+  <!-- Inline JavaScript to set today's date -->
+  <script>
+    // Function to set today's date in the date input field
+    document.addEventListener("DOMContentLoaded", function() {
+      const dateInput = document.getElementById('date');
+      
+      // Get today's date in YYYY-MM-DD format
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // Month is 0-based
+      const day = String(today.getDate()).padStart(2, '0');
+      
+      const formattedDate = `${year}-${month}-${day}`; // Format the date
+      
+      // Set the value of the date input to today's date
+      dateInput.value = formattedDate;
+    });
+
+    // Handle form submission
+    document.getElementById('add-topic').addEventListener('click', function() {
+      const topicInput = document.getElementById('topic').value;
+      const dateInput = document.getElementById('date').value;
+
+      // Ensure both topic and date are filled
+      if (topicInput && dateInput) {
+        // Store the topics and date in localStorage
+        const topics = topicInput.split(',').map(topic => ({
+          name: topic.trim(),
+          lastRevisionDate: dateInput, // Set the start date as the last revision date
+          reviewCount: 0 // Initialize review count
+        }));
+
+        // Save topics and date to localStorage
+        localStorage.setItem('topics', JSON.stringify(topics));
+        localStorage.setItem('startDate', dateInput);
+
+        // Redirect to third page
+        window.location.href = "thirdpage.html";  
+      } else {
+        alert('Please fill in both fields!');
+      }
+    });
+  </script>
 
 </body>
 </html>
