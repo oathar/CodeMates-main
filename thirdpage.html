@@ -6,75 +6,116 @@
   <title>Revision Planner</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> <!-- Include SheetJS -->
   <style>
-    /* Basic Styles for layout and buttons */
-    body {
-        font-family: Arial, sans-serif;
+    body{
+      background-color: lemonchiffon;
     }
-
-    .form-container {
-        width: 80%;
-        margin: auto;
-    }
-
-    .form-container h1 {
-        text-align: center;
-    }
-
+    
+    h1 {
+  text-align: center; /* Horizontally centers the title */
+  margin-top: 20px; /* Optional: Adds space above the title */
+  font-size: 2rem; /* Optional: Adjust font size */
+  color: black; /* Optional: Adjust color */
+}
+    /* Overall layout of the sections */
     .sections {
-        display: flex;
-        justify-content: space-between;
+      display: flex;
+      flex-direction: column; /* Change to vertical stack */
+      justify-content: space-around;
+      align-items: center;
+      margin-top: 20px;
+     
     }
+    .section{
+      width: 80%; /* Make all sections 80% wide */
+      background-color: #f0f8ff; /* Light blue background */
+      border: 2px solid skyblue; /* Blue border */
+      border-radius: 12px; /* Rounded corners */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for elevation */
+      padding: 15px;
+      margin-bottom: 20px; /* Space between sections */ 
 
-    .section {
-        width: 30%;
-        padding: 10px;
-        border-radius: 10px;
     }
-
+    
+    /* Specific styling for the Topics section */
+    #topics-section {
+      background-color: #f0f8ff;
+    }
+  
+    #topics-section h2 {
+      text-align: center;
+      color: #1e90ff; /* Blue color for the heading */
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+  
+    /* Specific styling for the Backlog and Completed sections */
+    #backlog-section {
+      background-color: #fff4e6; /* Light orange for Backlog */
+    }
+  
+    #backlog-section h2 {
+      text-align: center;
+      color: #ff6347; /* Red color for the heading */
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+  
+    #completed-section {
+      background-color: #d1f7d1; /* Light green for Completed */
+    }
+  
+    #completed-section h2 {
+      text-align: center;
+      color: #32cd32; /* Green color for the heading */
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+  
+    /* Styling for the topic boxes */
     .topic-box {
-        margin: 10px;
-        padding: 10px;
-        border: 1px solid #ccc;
+      background-color: #ffffff; /* White background for topic items */
+      border: 1px solid #ccc; /* Light grey border for each topic */
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px; /* Rounded corners for topic boxes */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-
-    .actions {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
+  
+    /* Hover effect for topic boxes */
+    .topic-box:hover {
+      transform: scale(1.02); /* Slight zoom on hover */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Add shadow on hover */
     }
-
-    .correct-btn, .wrong-btn {
-        padding: 5px 10px;
-        cursor: pointer;
+  
+    /* Styling for the action buttons */
+    .actions button {
+      background-color: white; /* Blue button */
+      color: white; /* White text */
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
-
-    #topics-table {
-        margin-top: 20px;
-    }
-
-    #backlog-list {
-        border: 3px solid red; /* Red border for Backlog */
-    }
-
-    #completed-list {
-        border: 3px solid green; /* Green border for Completed */
-    }
-
-    .backlog {
-        background-color: #f7d6d6;
-    }
-
-    .completed {
-        background-color: #d1f7d1;
+  
+    .actions button:hover {
+      background-color: black; /* Darker blue on hover */
     }
   </style>
+  
 </head>
 <body>
   <div class="form-container">
     <h1>Revision Planner</h1>
 
     <!-- Topics Button at the top-right -->
-    <button id="topics-button" style="position: absolute; top: 20px; right: 20px;">Topics</button>
+    <button id="topics-button" style="position: absolute; top: 20px; right: 20px; color:forestgreen ;">Export</button>
 
     <!-- Table for Topics (Hidden initially) -->
     <div id="topics-table" style="display: none;">
@@ -110,100 +151,109 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       const topics = JSON.parse(localStorage.getItem("topics")) || [];
       const intervals = [1, 3, 7, 14, 30];
       const topicList = document.getElementById("topic-list");
       const backlogList = document.getElementById("backlog-list");
       const completedList = document.getElementById("completed-list");
-
+  
       function updateLocalStorage() {
         localStorage.setItem("topics", JSON.stringify(topics));
       }
-
+  
       function addTopicBox(topic, container, status) {
-        const topicBox = document.createElement("div");
-        topicBox.classList.add("topic-box");
+  const topicBox = document.createElement("div");
+  topicBox.classList.add("topic-box");
 
-        // Set background color based on status
-        if (status === 'correct') {
-          topicBox.style.backgroundColor = "#b6fcb6"; // Green background for correct
-        } else if (status === 'wrong') {
-          topicBox.style.backgroundColor = "#fcb6b6"; // Red background for wrong
-        }
+  // Set background color based on status
+  if (status === "correct") {
+    topicBox.style.backgroundColor = "#b6fcb6"; // Green background for correct
+  } else if (status === "wrong") {
+    topicBox.style.backgroundColor = "#fcb6b6"; // Red background for wrong
+  }
 
-        const topicName = document.createElement("p");
-        topicName.textContent = topic.name;
-        topicBox.appendChild(topicName);
+  const topicName = document.createElement("p");
+  topicName.textContent = topic.name;
+  topicBox.appendChild(topicName);
 
-        let lastRevisionDate = new Date(topic.lastRevisionDate || new Date());
-        let nextReviewDate = new Date(lastRevisionDate);
-        let intervalIndex = Math.min(topic.reviewCount, intervals.length - 1);
-        nextReviewDate.setDate(lastRevisionDate.getDate() + intervals[intervalIndex]);
+  let lastRevisionDate = new Date(topic.lastRevisionDate || new Date());
+  let nextReviewDate = new Date(lastRevisionDate);
+  let intervalIndex = Math.min(topic.reviewCount, intervals.length - 1);
+  nextReviewDate.setDate(lastRevisionDate.getDate() + intervals[intervalIndex]);
 
-        const actions = document.createElement("div");
-        actions.classList.add("actions");
+  const actions = document.createElement("div");
+  actions.classList.add("actions");
 
-        const nextReviewText = document.createElement("span");
-        nextReviewText.textContent = `Next review: ${nextReviewDate.toLocaleDateString()}`;
-        actions.appendChild(nextReviewText);
+  if (container === backlogList) {
+    // Show Needs Revision in Backlog
+    const backlogText = document.createElement("span");
+    backlogText.textContent = "Needs Revision";
+    actions.appendChild(backlogText);
+  } else if (container === completedList) {
+    // Show Last Revision Date in Completed
+    const completedText = document.createElement("span");
+    completedText.textContent = `Last revised: ${lastRevisionDate.toLocaleDateString()}`;
+    actions.appendChild(completedText);
+  }
 
-        const correctButton = document.createElement("button");
-        correctButton.textContent = "✔️";
-        correctButton.classList.add("correct-btn");
-        correctButton.onclick = function () {
-          // Move topic to completed after first correct click
-          if (container === backlogList || container === topicList) {
-            topic.reviewCount = Math.min(topic.reviewCount, intervals.length - 1); // Keep the review count
-            topic.lastRevisionDate = new Date().toISOString(); // Update last revision date
-            container.removeChild(topicBox);
-            completedList.appendChild(topicBox);
-            topicBox.style.backgroundColor = "#b6fcb6"; // Mark completed topics with green background
-            topicBox.classList.add("completed"); // Add 'completed' class to signify it's completed
-            updateLocalStorage(); // Save updated topic state
-          }
-        };
+  // Add buttons for Topics Section
+  if (container === topicList) {
+    const correctButton = document.createElement("button");
+    correctButton.textContent = "✔️";
+    correctButton.classList.add("correct-btn");
+    correctButton.onclick = function () {
+      topic.reviewCount = Math.min(topic.reviewCount + 1, intervals.length - 1);
+      topic.lastRevisionDate = new Date().toISOString();
+      container.removeChild(topicBox);
+      addTopicBox(topic, completedList, "correct");
+      updateLocalStorage();
+    };
 
-        const wrongButton = document.createElement("button");
-        wrongButton.textContent = "❌";
-        wrongButton.classList.add("wrong-btn");
-        wrongButton.onclick = function () {
-          topic.reviewCount = 0;
-          topic.lastRevisionDate = new Date().toISOString();
-          container.removeChild(topicBox);
-          backlogList.appendChild(topicBox);
-          topicBox.style.backgroundColor = "#fcb6b6"; // Mark wrong topics with red background
-          updateLocalStorage(); // Save updated topic state
-        };
+    const wrongButton = document.createElement("button");
+    wrongButton.textContent = "❌";
+    wrongButton.classList.add("wrong-btn");
+    wrongButton.onclick = function () {
+      topic.reviewCount = 0;
+      topic.lastRevisionDate = new Date().toISOString();
+      container.removeChild(topicBox);
+      addTopicBox(topic, backlogList, "wrong");
+      updateLocalStorage();
+    };
 
-        actions.appendChild(correctButton);
-        actions.appendChild(wrongButton);
-        topicBox.appendChild(actions);
+    actions.appendChild(correctButton);
+    actions.appendChild(wrongButton);
+  } else if (container === backlogList) {
+    // Add button for moving Backlog topics to Completed
+    const correctButton = document.createElement("button");
+    correctButton.textContent = "✔️";
+    correctButton.classList.add("correct-btn");
+    correctButton.onclick = function () {
+      topic.reviewCount = Math.min(topic.reviewCount + 1, intervals.length - 1);
+      topic.lastRevisionDate = new Date().toISOString();
+      container.removeChild(topicBox);
+      addTopicBox(topic, completedList, "correct");
+      updateLocalStorage();
+    };
+    actions.appendChild(correctButton);
+  }
 
-        // Remove correct and wrong buttons for completed section
-        if (container === completedList) {
-          actions.removeChild(correctButton);
-          actions.removeChild(wrongButton);
-        }
+  topicBox.appendChild(actions);
 
-        // Remove wrong button for backlog section
-        if (container === backlogList) {
-          actions.removeChild(wrongButton);
-        }
+  // Add the appropriate class for the section
+  if (container === backlogList) {
+    topicBox.classList.add("backlog");
+  } else if (container === completedList) {
+    topicBox.classList.add("completed");
+  }
 
-        // Add the correct class to the backlog or completed container
-        if (container === backlogList) {
-          topicBox.classList.add("backlog");
-        } else if (container === completedList) {
-          topicBox.classList.add("completed");
-        }
+  container.appendChild(topicBox);
+}
 
-        container.appendChild(topicBox);
-      }
-
+  
       // Add topics to initial list
-      topics.forEach((topic) => addTopicBox(topic, topicList, ''));
-
+      topics.forEach((topic) => addTopicBox(topic, topicList, ""));
+  
       // Show topics table on button click
       document.getElementById("topics-button").addEventListener("click", function () {
         const topicsTable = document.getElementById("topics-table");
@@ -220,7 +270,7 @@
         });
         topicsTable.style.display = "block";
       });
-
+  
       // Export topics to Excel
       document.getElementById("export-excel").addEventListener("click", function () {
         const excelData = topics.map((t) => ({
@@ -234,6 +284,6 @@
         XLSX.writeFile(wb, "topics.xlsx");
       });
     });
-  </script>
+  </script>  
 </body> 
 </html>
