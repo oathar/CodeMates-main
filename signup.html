@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+  <style>
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #faebd7, #faebd7);
+      color: #333;
+    }
+
+    .form-container {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+    p{
+      color: black;
+      margin-top: 5%;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: #1658ca;
+    }
+
+    .action-group {
+      margin-top: 15px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #000000;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background: #36a4df;
+    }
+
+    .login-link {
+      color: #1b0c0b;
+      text-decoration: none;
+    }
+
+    .login-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Signup</h2>
+    <form action="#" method="POST">
+      <div class="input-group">
+        <label for="signup-username">Username</label>
+        <input type="text" id="signup-username" name="username" placeholder="Enter your username" required>
+      </div>
+      <div class="input-group">
+        <label for="signup-email">Email</label>
+        <input type="email" id="signup-email" name="email" placeholder="Enter your email" required>
+      </div>
+      <div class="input-group">
+        <label for="signup-password">Password</label>
+        <input type="password" id="signup-password" name="password" placeholder="Enter your password" required>
+      </div>
+      <div class="input-group">
+        <label for="signup-confirm-password">Confirm Password</label>
+        <input type="password" id="signup-confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+      </div>
+      <div class="action-group">
+        <button type="submit" class="btn">Signup</button>
+      </div>
+    </form>
+    <p>If already signed up, <a href="login.html" class="login-link">Log in</a>.</p>
+  </div>
+</body>
+</html>
