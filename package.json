@@ -1,0 +1,21 @@
+{
+  "name": "codemates-main",
+  "version": "1.0.0",
+  "description": "A web-based revision planner that helps students manage their study schedule. The tool allows users to input the topics they want to revise, select a start date, and automatically schedules them for revisiting. Users can track their progress by marking topics as Completed or Backlogs.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongodb": "^6.11.0",
+    "mongoose": "^8.8.3"
+  }
+}

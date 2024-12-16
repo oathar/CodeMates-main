@@ -36,7 +36,8 @@
       margin-bottom: 20px;
       font-size: 1.8rem;
     }
-    p{
+
+    p {
       color: black;
       margin-top: 5%;
     }
@@ -87,7 +88,7 @@
     }
 
     .login-link {
-      color: #1b0c0b;
+      color: #2d79ad; /* Complementary blue color */
       text-decoration: none;
     }
 
@@ -99,7 +100,7 @@
 <body>
   <div class="form-container">
     <h2>Signup</h2>
-    <form action="#" method="POST">
+    <form id="signup-form">
       <div class="input-group">
         <label for="signup-username">Username</label>
         <input type="text" id="signup-username" name="username" placeholder="Enter your username" required>
@@ -122,5 +123,40 @@
     </form>
     <p>If already signed up, <a href="login.html" class="login-link">Log in</a>.</p>
   </div>
+
+  <script>
+    document.getElementById('signup-form').addEventListener('submit', async function(e) {
+      e.preventDefault(); // Prevent the default form submission
+
+      const formData = {
+        username: document.getElementById('signup-username').value,
+        email: document.getElementById('signup-email').value,
+        password: document.getElementById('signup-password').value,
+        confirmPassword: document.getElementById('signup-confirm-password').value,
+      };
+
+      // Send the form data to the server
+      try {
+        const response = await fetch('http://localhost:3000/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+        alert(result.message);  // Show the response message from the server
+
+        if (response.status === 201) {
+          // Redirect to index.html if the user was successfully created
+          window.location.href = 'index.html';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('There was an error submitting the form. Please try again.');
+      }
+    });
+  </script>
 </body>
 </html>
