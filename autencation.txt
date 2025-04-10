@@ -1,0 +1,54 @@
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const bodyParser = require("body-parser");
+const fs = require("fs");
+
+const app = express();
+const PORT = 3000;
+
+app.use(bodyParser.json());
+
+const usersFile = "./users.json";
+
+// Load users
+let users = [];
+if (fs.existsSync(usersFile)) {
+  users = JSON.parse(fs.readFileSync(usersFile));
+}
+
+// Signup route
+app.post("/signup", async (req, res) => {
+  const { username, password } = req.body;
+
+  // Check if user exists
+  if (users.find(u => u.username === username)) {
+    return res.status(400).json({ message: "User already exists" });
+  }
+
+  // Hash the password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Store user
+  const newUser = { username, password: hashedPassword };
+  users.push(newUser);
+  fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
+
+  res.status(201).json({ message: "User created successfully" });
+});
+
+// Login route
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  const user = users.find(u => u.username === username);
+  if (!user) return res.status(400).json({ message: "User not found" });
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+
+  res.status(200).json({ message: "Login successful" });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
